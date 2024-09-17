@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RoutinesDbService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+00d39fccf091449e403cca458fc6956e6236c42c")]
 [assembly: System.Reflection.AssemblyProductAttribute("RoutinesDbService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RoutinesDbService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

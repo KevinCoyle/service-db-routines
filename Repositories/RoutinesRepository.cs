@@ -18,7 +18,7 @@ public class RoutinesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"INSERT INTO routines(id, owner_id, name, description, follow_up_routine_id) VALUES 
                                  (@Id, @OwnerId, @Name, @Description, @FollowUpRoutineId)
@@ -41,7 +41,7 @@ public class RoutinesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 
@@ -73,7 +73,7 @@ public class RoutinesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"SELECT
                                 id
@@ -101,7 +101,7 @@ public class RoutinesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = $@"SELECT 
                                 id
@@ -130,7 +130,7 @@ public class RoutinesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 
@@ -144,9 +144,9 @@ public class RoutinesRepository
                 return false;
 
             string updateQuery = @"UPDATE routines SET 
-                                        owner_id = @OwnerId,
-                                        , name = @Name,
-                                        , description = @Description,
+                                        owner_id = @OwnerId
+                                        , name = @Name
+                                        , description = @Description
                                         , follow_up_routine_id = @FollowupRoutineId
                                         WHERE id = @Id
                                     ;";

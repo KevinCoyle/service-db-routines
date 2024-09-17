@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xYDat3rESag=",
+  "dgSpecHash": "uavfDuLmSzY=",
   "success": true,
-  "projectFilePath": "/home/nomiblek/RiderProjects/RoutinesDbService/RoutinesDbService.csproj",
+  "projectFilePath": "/home/nomiblek/RiderProjects/service-db-routines/RoutinesDbService.csproj",
   "expectedPackageFiles": [
     "/home/nomiblek/.nuget/packages/bouncycastle.cryptography/2.3.1/bouncycastle.cryptography.2.3.1.nupkg.sha512",
     "/home/nomiblek/.nuget/packages/dapper/2.1.35/dapper.2.1.35.nupkg.sha512",

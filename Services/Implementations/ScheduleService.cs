@@ -13,7 +13,7 @@ public class ScheduleService : IScheduleService
         return results;
     }
 
-    public async Task<Schedule> GetScheduleById(string id)
+    public async Task<Schedule?> GetScheduleById(string id)
     {
         var result = await _schedulesRepository.GetById(id);
         

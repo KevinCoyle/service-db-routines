@@ -13,7 +13,7 @@ public class UserService : IUserService
         return results;
     }
 
-    public async Task<User> GetUserById(string id)
+    public async Task<User?> GetUserById(string id)
     {
         var result = await _usersRepository.GetById(id);
         

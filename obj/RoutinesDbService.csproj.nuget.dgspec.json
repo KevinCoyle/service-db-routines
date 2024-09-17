@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/nomiblek/RiderProjects/RoutinesDbService/RoutinesDbService.csproj": {}
+    "/home/nomiblek/RiderProjects/service-db-routines/RoutinesDbService.csproj": {}
   },
   "projects": {
-    "/home/nomiblek/RiderProjects/RoutinesDbService/RoutinesDbService.csproj": {
+    "/home/nomiblek/RiderProjects/service-db-routines/RoutinesDbService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/nomiblek/RiderProjects/RoutinesDbService/RoutinesDbService.csproj",
+        "projectUniqueName": "/home/nomiblek/RiderProjects/service-db-routines/RoutinesDbService.csproj",
         "projectName": "RoutinesDbService",
-        "projectPath": "/home/nomiblek/RiderProjects/RoutinesDbService/RoutinesDbService.csproj",
+        "projectPath": "/home/nomiblek/RiderProjects/service-db-routines/RoutinesDbService.csproj",
         "packagesPath": "/home/nomiblek/.nuget/packages/",
-        "outputPath": "/home/nomiblek/RiderProjects/RoutinesDbService/obj/",
+        "outputPath": "/home/nomiblek/RiderProjects/service-db-routines/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/nomiblek/.nuget/NuGet/NuGet.Config"
@@ -37,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net9.0": {

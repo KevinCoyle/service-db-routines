@@ -18,7 +18,7 @@ public class UsersRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"INSERT INTO user(id, name, nickname, email) VALUES 
                                  (@Id, @Name, @Nickname, @Email)
@@ -41,7 +41,7 @@ public class UsersRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 
@@ -73,7 +73,7 @@ public class UsersRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"SELECT
                                 id
@@ -100,7 +100,7 @@ public class UsersRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = $@"SELECT 
                                 id
@@ -128,7 +128,7 @@ public class UsersRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 

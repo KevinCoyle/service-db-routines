@@ -20,7 +20,7 @@ public class ActionsRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"INSERT INTO actions (id, routine_id, name, description, follow_up_action_id) VALUES 
                                  (@Id, @RoutineId, @Name, @Description, @FollowUpActionId)
@@ -43,7 +43,7 @@ public class ActionsRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 
@@ -75,7 +75,7 @@ public class ActionsRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"SELECT
                                 id
@@ -103,7 +103,7 @@ public class ActionsRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = $@"SELECT 
                                 id
@@ -132,7 +132,7 @@ public class ActionsRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 

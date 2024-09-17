@@ -13,7 +13,7 @@ public class ActionService : IActionService
         return results;
     }
 
-    public async Task<Action> GetActionById(string id)
+    public async Task<Action?> GetActionById(string id)
     {
         var result = await _actionsRepository.GetById(id);
         

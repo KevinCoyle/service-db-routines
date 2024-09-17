@@ -18,7 +18,7 @@ public class SchedulesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"INSERT INTO schedule(id, routine_id, name, description) VALUES 
                                  (
@@ -46,7 +46,7 @@ public class SchedulesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 
@@ -78,7 +78,7 @@ public class SchedulesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = @"SELECT
                                 id
@@ -104,7 +104,7 @@ public class SchedulesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string query = $@"SELECT 
                                 id
@@ -132,7 +132,7 @@ public class SchedulesRepository
     {
         try
         {
-            _dbConnection?.Open();
+            _dbConnection.Open();
 
             string selectQuery = $@"SELECT 
                                         * 

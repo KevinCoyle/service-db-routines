@@ -13,7 +13,7 @@ public class RoutineService : IRoutineService
         return results;
     }
 
-    public async Task<Routine> GetRoutineById(string id)
+    public async Task<Routine?> GetRoutineById(string id)
     {
         var result = await _routinesRepository.GetById(id);
         
