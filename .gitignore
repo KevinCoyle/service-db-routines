@@ -25,6 +25,8 @@ bld/
 
 .vs/
 
+.idea/
+
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
