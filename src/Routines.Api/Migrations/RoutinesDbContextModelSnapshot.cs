@@ -11,13 +11,13 @@ using Routines.Api.Database;
 namespace Routines.Api.Migrations
 {
     [DbContext(typeof(RoutinesDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    partial class RoutinesDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0-rc.1.24451.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -37,10 +37,12 @@ namespace Routines.Api.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("RoutineId")
+                    b.Property<Guid?>("RoutineId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FollowUpActionId");
 
                     b.HasIndex("RoutineId");
 
@@ -83,7 +85,7 @@ namespace Routines.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int[]>("Intervals")
+                    b.PrimitiveCollection<int[]>("Intervals")
                         .HasColumnType("integer[]");
 
                     b.Property<string>("Name")
@@ -123,11 +125,17 @@ namespace Routines.Api.Migrations
 
             modelBuilder.Entity("Routines.Api.Domain.Action", b =>
                 {
-                    b.HasOne("Routines.Api.Domain.Routine", null)
+                    b.HasOne("Routines.Api.Domain.Action", "FollowUpAction")
+                        .WithMany()
+                        .HasForeignKey("FollowUpActionId");
+
+                    b.HasOne("Routines.Api.Domain.Routine", "Routine")
                         .WithMany("Actions")
-                        .HasForeignKey("RoutineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoutineId");
+
+                    b.Navigation("FollowUpAction");
+
+                    b.Navigation("Routine");
                 });
 
             modelBuilder.Entity("Routines.Api.Domain.Routine", b =>
@@ -147,11 +155,9 @@ namespace Routines.Api.Migrations
 
             modelBuilder.Entity("Routines.Api.Domain.Schedule", b =>
                 {
-                    b.HasOne("Routines.Api.Domain.Routine", "Routine")
+                    b.HasOne("Routines.Api.Domain.Routine", null)
                         .WithMany("Schedules")
                         .HasForeignKey("RoutineId");
-
-                    b.Navigation("Routine");
                 });
 
             modelBuilder.Entity("Routines.Api.Domain.Routine", b =>

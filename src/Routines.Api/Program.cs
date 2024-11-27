@@ -1,5 +1,4 @@
 using Routines.Api.Database;
-using Routines.Api.Services;
 using Routines.Api.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -25,6 +24,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<RoutinesDbContext>(x => x.UseNpgsql("Database:ConnectionString"));
+builder.Services.AddScoped<IActionService, ActionService>();
+builder.Services.AddScoped<IRoutineService, RoutineService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

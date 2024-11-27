@@ -2,7 +2,6 @@
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Routines.Api.Database;
-using Routines.Api.Domain;
 using Routines.Api.Services.Interfaces;
 using Action = Routines.Api.Domain.Action;
 

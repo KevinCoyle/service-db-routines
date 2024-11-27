@@ -11,6 +11,8 @@ public class Routine
     
     public string? Description { get; set; } = default!;
     
+    public Guid? FollowUpRoutineId { get; set; } = default!;
+    
     public Routine? FollowUpRoutine { get; set; } = default!;
     
     public Guid? OwnerId { get; set; } = default!;

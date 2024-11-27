@@ -1,4 +1,6 @@
-﻿namespace Routines.Api.Contracts.Responses.Actions;
+﻿using Routines.Api.Contracts.Responses.Routines;
+
+namespace Routines.Api.Contracts.Responses.Actions;
 
 public class ActionResponse
 {
@@ -8,7 +10,11 @@ public class ActionResponse
     
     public string? Description { get; init; } = default!;
     
-    public Guid RoutineId { get; init; } = default!;
+    public Guid? RoutineId { get; init; }
     
-    public Guid? FollowUpActionId { get; init; } = default!;
+    public RoutineResponse? Routine { get; init; }
+    
+    public Guid? FollowUpActionId { get; init; }
+    
+    public ActionResponse? FollowUpAction { get; init; }
 }

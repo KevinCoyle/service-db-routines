@@ -17,7 +17,9 @@ public static class DomainToApiContractMapper
             Name = action.Name,
             Description = action.Description,
             RoutineId = action.RoutineId,
+            Routine = action.Routine?.ToRoutineResponse(),
             FollowUpActionId = action.FollowUpActionId,
+            FollowUpAction = action.FollowUpAction?.ToActionResponse(),
         };
     }
     
@@ -31,7 +33,9 @@ public static class DomainToApiContractMapper
                 Name = action.Name,
                 Description = action.Description,
                 RoutineId = action.RoutineId,
+                Routine = action.Routine?.ToRoutineResponse(),
                 FollowUpActionId = action.FollowUpActionId,
+                FollowUpAction = action.FollowUpAction?.ToActionResponse(),
             })
         };
     }
@@ -77,8 +81,6 @@ public static class DomainToApiContractMapper
             Name = schedule.Name,
             Description = schedule.Description,
             Intervals = schedule.Intervals,
-            RoutineId = schedule.RoutineId,
-            Routine = schedule.Routine?.ToRoutineResponse(),
         };
     }
 
@@ -92,8 +94,6 @@ public static class DomainToApiContractMapper
                 Name = schedule.Name,
                 Description = schedule.Description,
                 Intervals = schedule.Intervals,
-                RoutineId = schedule.RoutineId,
-                Routine = schedule.Routine?.ToRoutineResponse(),
             })
         };
     }

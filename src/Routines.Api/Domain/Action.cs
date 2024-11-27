@@ -11,7 +11,11 @@ public class Action
     
     public string? Description { get; set; } = default!;
     
-    public Guid RoutineId { get; set; } = default!;
+    public Guid? RoutineId { get; set; } = default!;
+    
+    public Routine? Routine { get; set; } = default!;
     
     public Guid? FollowUpActionId { get; set; } = default!;
+    
+    public Action? FollowUpAction { get; set; } = default!;
 }

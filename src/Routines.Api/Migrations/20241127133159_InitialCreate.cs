@@ -6,11 +6,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Routines.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSetup : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Routines",
                 columns: table => new
@@ -43,18 +57,22 @@ namespace Routines.Api.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    RoutineId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoutineId = table.Column<Guid>(type: "uuid", nullable: true),
                     FollowUpActionId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Actions", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Actions_Actions_FollowUpActionId",
+                        column: x => x.FollowUpActionId,
+                        principalTable: "Actions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Actions_Routines_RoutineId",
                         column: x => x.RoutineId,
                         principalTable: "Routines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -62,10 +80,10 @@ namespace Routines.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoutineId = table.Column<Guid>(type: "uuid", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Intervals = table.Column<int[]>(type: "integer[]", nullable: true)
+                    Intervals = table.Column<int[]>(type: "integer[]", nullable: true),
+                    RoutineId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,6 +94,11 @@ namespace Routines.Api.Migrations
                         principalTable: "Routines",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Actions_FollowUpActionId",
+                table: "Actions",
+                column: "FollowUpActionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Actions_RoutineId",
@@ -109,6 +132,9 @@ namespace Routines.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Routines");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

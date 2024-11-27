@@ -8,17 +8,17 @@ public class RoutineResponse
 {
     public Guid Id { get; init; }
     
-    public string? Name { get; set; } = default!;
+    public string? Name { get; init; } = default!;
     
-    public string? Description { get; set; } = default!;
+    public string? Description { get; init; } = default!;
     
-    public RoutineResponse? FollowUpRoutine { get; set; } = default!;
+    public Guid? OwnerId { get; init; }
     
-    public Guid? OwnerId { get; set; } = default!;
+    public UserResponse? Owner { get; init; }
     
-    public UserResponse? Owner { get; set; } = default!;
+    public IEnumerable<ActionResponse>? Actions { get; init; }
     
-    public IEnumerable<ActionResponse>? Actions { get; set; } = default!;
+    public IEnumerable<ScheduleResponse>? Schedules { get; init; } 
     
-    public IEnumerable<ScheduleResponse>? Schedules { get; set; } = default!;
+    public RoutineResponse? FollowUpRoutine { get; init; }
 }

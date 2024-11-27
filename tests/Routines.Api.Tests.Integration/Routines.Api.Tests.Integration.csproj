@@ -2,13 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
+        <ImplicitUsings>enable</ImplicitUsings>
         <IsPackable>false</IsPackable>
-
         <LangVersion>default</LangVersion>
-
         <RootNamespace>Routines.Api.Tests.Integration</RootNamespace>
     </PropertyGroup>
 
@@ -16,8 +13,8 @@
         <PackageReference Include="Bogus" Version="34.0.2" />
         <PackageReference Include="FluentAssertions" Version="6.10.0" />
         <PackageReference Include="Meziantou.Extensions.Logging.Xunit" Version="1.0.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-rc.1.24452.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0-rc.1.24451.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
         <PackageReference Include="Respawn" Version="6.0.0" />
         <PackageReference Include="Testcontainers.PostgreSql" Version="3.10.0" />
@@ -34,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Routines.Api\Routines.Api.csproj" />
+        <ProjectReference Include="..\..\src\Routines.Api\Routines.Api.csproj" />
     </ItemGroup>
 
 </Project>
