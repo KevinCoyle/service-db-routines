@@ -54,14 +54,14 @@ public class ActionController : ControllerBase
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateActionRequest request)
     {
-        var existingAction = await _actionService.GetAsync(request.Id);
+        var action = await _actionService.GetAsync(request.Id);
 
-        if (existingAction is null)
+        if (action is null)
         {
             return NotFound();
         }
 
-        var action = request.ToAction();
+        action.Name = request.Action.Name;
         await _actionService.UpdateAsync(action);
 
         var actionResponse = action.ToActionResponse();

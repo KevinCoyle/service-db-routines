@@ -54,14 +54,15 @@ public class ScheduleController : ControllerBase
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateScheduleRequest request)
     {
-        var existingSchedule = await _scheduleService.GetAsync(request.Id);
+        var schedule = await _scheduleService.GetAsync(request.Id);
 
-        if (existingSchedule is null)
+        if (schedule is null)
         {
             return NotFound();
         }
 
-        var schedule = request.ToSchedule();
+        schedule.Name = request.Schedule.Name ?? schedule.Name;
+        schedule.Description = request.Schedule.Description ?? schedule.Description;
         await _scheduleService.UpdateAsync(schedule);
 
         var scheduleResponse = schedule.ToScheduleResponse();

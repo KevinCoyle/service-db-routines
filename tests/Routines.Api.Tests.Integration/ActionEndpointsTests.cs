@@ -19,6 +19,7 @@ public class ActionEndpointsTests : IAsyncLifetime
 {
     private HttpClient _client = null!;
     private readonly ITestOutputHelper _testOutputHelper;
+    private RoutinesDbContext? _dbContext;
 
     private readonly Faker<ActionRequest> _actionGenerator =
         new Faker<ActionRequest>()
@@ -32,7 +33,9 @@ public class ActionEndpointsTests : IAsyncLifetime
             .WithPassword("P@ssw0rD")
             .Build();
 
-    public ActionEndpointsTests(ITestOutputHelper testOutputHelper)
+    public ActionEndpointsTests(
+        ITestOutputHelper testOutputHelper
+    )
     {
         _testOutputHelper = testOutputHelper;
     }
@@ -59,6 +62,72 @@ public class ActionEndpointsTests : IAsyncLifetime
         actionResponse.Id.Should().NotBeEmpty();
     }
 
+    [Fact]
+    public async Task GetAll_ShouldGetAllActions_WhenDetailsAreValid()
+    {
+        // Arrange
+        var expectedResponseCount = _dbContext?.Actions.ToList().Count;
+
+        // Act
+        var response = await _client.GetAsync($"actions");
+        var actionsResponse = await response.Content.ReadFromJsonAsync<GetAllActionsResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        actionsResponse!.Actions.Should().NotBeNullOrEmpty();
+        actionsResponse.Actions.Count().Should().Be(expectedResponseCount);
+    }
+
+    [Fact]
+    public async Task Get_ShouldGetAction_WhenDetailsAreValid()
+    {
+        // Arrange
+        var expectedResponse = await _dbContext?.Actions.FirstAsync()!;
+
+        // Act
+        var response = await _client.GetAsync($"actions/{expectedResponse.Id}");
+        var actionResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        actionResponse.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Fact]
+    public async Task Update_ShouldUpdateAction_WhenDetailsAreValid()
+    {
+        // Arrange
+        var request = _actionGenerator.Generate();
+        var requestId = (await _dbContext?.Actions.FirstAsync()!).Id;
+        var expectedResponse = request;
+        expectedResponse.Id = requestId;
+
+        // Act
+        var response = await _client.PutAsJsonAsync($"actions/{requestId}", request);
+        var actionResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        actionResponse!.Id.Should().Be(expectedResponse.Id ?? Guid.Empty);
+        actionResponse!.Name.Should().Be(expectedResponse.Name);
+    }
+
+    [Fact]
+    public async Task Delete_ShouldDeleteAction_WhenDetailsAreValid()
+    {
+        // Arrange
+        var request = (await _dbContext?.Actions.FirstAsync()!).Id;
+        var countBeforeDelete = _dbContext?.Actions.ToList().Count;
+
+        // Act
+        var response = await _client.DeleteAsync($"actions/{request}");
+        var countAfterDelete = _dbContext?.Actions.ToList().Count;
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        countAfterDelete.Should().Be(countBeforeDelete - 1);
+    }
+    
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
@@ -79,8 +148,29 @@ public class ActionEndpointsTests : IAsyncLifetime
                     services.RemoveAll<DbContextOptions<RoutinesDbContext>>();
                     services.RemoveAll<RoutinesDbContext>();
 
-                    services.AddDbContext<RoutinesDbContext>(x =>
-                        x.UseNpgsql(_dbContainer.GetConnectionString()));
+                    services.AddDbContext<RoutinesDbContext>(optionsBuilder =>
+                        optionsBuilder.UseNpgsql(_dbContainer.GetConnectionString())
+                            .UseAsyncSeeding(async (context, _, ct) =>
+                            {
+                                var faker = new Faker<Routines.Api.Domain.Action>()
+                                    .UseSeed(420)
+                                    .RuleFor(x => x.Id, f => f.Random.Guid())
+                                    .RuleFor(x => x.Name, f => f.Random.Words(3))
+                                    .RuleFor(x => x.Description, f => f.Random.Words(8));
+                                
+                                var actionsToSeed = faker.Generate(10);
+                                
+                                var contains = await context.Set<Routines.Api.Domain.Action>().ContainsAsync(actionsToSeed[0], cancellationToken: ct);
+
+                                if (!contains)
+                                {
+                                    await context.Set<Routines.Api.Domain.Action>().AddRangeAsync(actionsToSeed, cancellationToken: ct);
+                                    await context.SaveChangesAsync();
+                                }
+                            })
+                    );
+                    
+                    _dbContext = services.BuildServiceProvider().GetService<RoutinesDbContext>()!;
                 });
             });
         

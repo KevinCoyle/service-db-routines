@@ -54,14 +54,15 @@ public class RoutineController : ControllerBase
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateRoutineRequest request)
     {
-        var existingRoutine = await _routineService.GetAsync(request.Id);
+        var routine = await _routineService.GetAsync(request.Id);
 
-        if (existingRoutine is null)
+        if (routine is null)
         {
             return NotFound();
         }
 
-        var routine = request.ToRoutine();
+        routine.Name = request.Routine.Name ?? routine.Name;
+        routine.OwnerId = request.Routine.OwnerId ?? routine.OwnerId;
         await _routineService.UpdateAsync(routine);
 
         var routineResponse = routine.ToRoutineResponse();

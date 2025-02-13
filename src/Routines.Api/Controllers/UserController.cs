@@ -54,14 +54,16 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateUserRequest request)
     {
-        var existingUser = await _userService.GetAsync(request.Id);
+        var user = await _userService.GetAsync(request.Id);
 
-        if (existingUser is null)
+        if (user is null)
         {
             return NotFound();
         }
 
-        var user = request.ToUser();
+        user.FullName = request.User.FullName ?? user.FullName;
+        user.Email = request.User.Email ?? user.Email;
+        user.DateOfBirth = request.User.DateOfBirth ?? user.DateOfBirth;
         await _userService.UpdateAsync(user);
 
         var userResponse = user.ToUserResponse();
