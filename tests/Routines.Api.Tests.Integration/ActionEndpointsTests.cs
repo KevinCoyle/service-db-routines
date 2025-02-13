@@ -53,13 +53,13 @@ public class ActionEndpointsTests : IAsyncLifetime
 
         // Act
         var response = await _client.PostAsJsonAsync("actions", request);
-        var actionResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
+        var actualResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        response.Headers.Location.Should().Be($"http://localhost/actions/{actionResponse!.Id}");
-        actionResponse.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-        actionResponse.Id.Should().NotBeEmpty();
+        response.Headers.Location.Should().Be($"http://localhost/actions/{actualResponse!.Id}");
+        actualResponse.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+        actualResponse.Id.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -70,12 +70,12 @@ public class ActionEndpointsTests : IAsyncLifetime
 
         // Act
         var response = await _client.GetAsync($"actions");
-        var actionsResponse = await response.Content.ReadFromJsonAsync<GetAllActionsResponse>();
+        var actualResponse = await response.Content.ReadFromJsonAsync<GetAllActionsResponse>();
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        actionsResponse!.Actions.Should().NotBeNullOrEmpty();
-        actionsResponse.Actions.Count().Should().Be(expectedResponseCount);
+        actualResponse!.Actions.Should().NotBeNullOrEmpty();
+        actualResponse.Actions.Count().Should().Be(expectedResponseCount);
     }
 
     [Fact]
@@ -86,11 +86,11 @@ public class ActionEndpointsTests : IAsyncLifetime
 
         // Act
         var response = await _client.GetAsync($"actions/{expectedResponse.Id}");
-        var actionResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
+        var actualResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        actionResponse.Should().BeEquivalentTo(expectedResponse);
+        actualResponse.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Fact]
@@ -104,12 +104,12 @@ public class ActionEndpointsTests : IAsyncLifetime
 
         // Act
         var response = await _client.PutAsJsonAsync($"actions/{requestId}", request);
-        var actionResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
+        var actualResponse = await response.Content.ReadFromJsonAsync<ActionResponse>();
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        actionResponse!.Id.Should().Be(expectedResponse.Id ?? Guid.Empty);
-        actionResponse!.Name.Should().Be(expectedResponse.Name);
+        actualResponse!.Id.Should().Be(expectedResponse.Id ?? Guid.Empty);
+        actualResponse!.Name.Should().Be(expectedResponse.Name);
     }
 
     [Fact]
@@ -153,10 +153,10 @@ public class ActionEndpointsTests : IAsyncLifetime
                             .UseAsyncSeeding(async (context, _, ct) =>
                             {
                                 var faker = new Faker<Routines.Api.Domain.Action>()
-                                    .UseSeed(420)
                                     .RuleFor(x => x.Id, f => f.Random.Guid())
                                     .RuleFor(x => x.Name, f => f.Random.Words(3))
-                                    .RuleFor(x => x.Description, f => f.Random.Words(8));
+                                    .RuleFor(x => x.Description, f => f.Random.Words(8))
+                                    .UseSeed(420);
                                 
                                 var actionsToSeed = faker.Generate(10);
                                 

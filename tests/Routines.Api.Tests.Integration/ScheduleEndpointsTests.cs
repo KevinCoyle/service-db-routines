@@ -19,6 +19,7 @@ public class ScheduleEndpointsTests : IAsyncLifetime
 {
     private HttpClient _client = null!;
     private readonly ITestOutputHelper _testOutputHelper;
+    private RoutinesDbContext? _dbContext;
 
     private readonly Faker<ScheduleRequest> _scheduleGenerator =
         new Faker<ScheduleRequest>()
@@ -52,13 +53,79 @@ public class ScheduleEndpointsTests : IAsyncLifetime
 
         // Act
         var response = await _client.PostAsJsonAsync("schedules", request);
-        var scheduleResponse = await response.Content.ReadFromJsonAsync<ScheduleResponse>();
+        var actualResponse = await response.Content.ReadFromJsonAsync<ScheduleResponse>();
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        response.Headers.Location.Should().Be($"http://localhost/schedules/{scheduleResponse!.Id}");
-        scheduleResponse.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
-        scheduleResponse.Id.Should().NotBeEmpty();
+        response.Headers.Location.Should().Be($"http://localhost/schedules/{actualResponse!.Id}");
+        actualResponse.Should().BeEquivalentTo(expectedResponse, opt => opt.Excluding(x => x.Id));
+        actualResponse.Id.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task GetAll_ShouldGetAllSchedules_WhenDetailsAreValid()
+    {
+        // Arrange
+        var expectedResponseCount = _dbContext?.Schedules.ToList().Count;
+
+        // Act
+        var response = await _client.GetAsync($"schedules");
+        var actualResponse = await response.Content.ReadFromJsonAsync<GetAllSchedulesResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        actualResponse!.Schedules.Should().NotBeNullOrEmpty();
+        actualResponse.Schedules.Count().Should().Be(expectedResponseCount);
+    }
+
+    [Fact]
+    public async Task Get_ShouldGetSchedule_WhenDetailsAreValid()
+    {
+        // Arrange
+        var expectedResponse = await _dbContext?.Schedules.FirstAsync()!;
+
+        // Act
+        var response = await _client.GetAsync($"schedules/{expectedResponse.Id}");
+        var actualResponse = await response.Content.ReadFromJsonAsync<ScheduleResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        actualResponse.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Fact]
+    public async Task Update_ShouldUpdateSchedule_WhenDetailsAreValid()
+    {
+        // Arrange
+        var request = _scheduleGenerator.Generate();
+        var requestId = (await _dbContext?.Schedules.FirstAsync()!).Id;
+        var expectedResponse = request;
+        expectedResponse.Id = requestId;
+
+        // Act
+        var response = await _client.PutAsJsonAsync($"schedules/{requestId}", request);
+        var actualResponse = await response.Content.ReadFromJsonAsync<ScheduleResponse>();
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        actualResponse!.Id.Should().Be(expectedResponse.Id ?? Guid.Empty);
+        actualResponse!.Name.Should().Be(expectedResponse.Name);
+    }
+
+    [Fact]
+    public async Task Delete_ShouldDeleteSchedule_WhenDetailsAreValid()
+    {
+        // Arrange
+        var request = (await _dbContext?.Schedules.FirstAsync()!).Id;
+        var countBeforeDelete = _dbContext?.Schedules.ToList().Count;
+
+        // Act
+        var response = await _client.DeleteAsync($"schedules/{request}");
+        var countAfterDelete = _dbContext?.Schedules.ToList().Count;
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        countAfterDelete.Should().Be(countBeforeDelete - 1);
     }
 
     public async Task InitializeAsync()
@@ -81,8 +148,29 @@ public class ScheduleEndpointsTests : IAsyncLifetime
                     services.RemoveAll<DbContextOptions<RoutinesDbContext>>();
                     services.RemoveAll<RoutinesDbContext>();
 
-                    services.AddDbContext<RoutinesDbContext>(x =>
-                        x.UseNpgsql(_dbContainer.GetConnectionString()));
+                    services.AddDbContext<RoutinesDbContext>(optionsBuilder =>
+                        optionsBuilder.UseNpgsql(_dbContainer.GetConnectionString())
+                            .UseAsyncSeeding(async (context, _, ct) =>
+                            {
+                                var faker = new Faker<Routines.Api.Domain.Schedule>()
+                                    .RuleFor(x => x.Id, f => f.Random.Guid())
+                                    .RuleFor(x => x.Name, f => f.Random.Words(3))
+                                    .RuleFor(x => x.Description, f => f.Random.Words(8))
+                                    .UseSeed(420);
+                                
+                                var schedulesToSeed = faker.Generate(10);
+                                
+                                var contains = await context.Set<Routines.Api.Domain.Schedule>().ContainsAsync(schedulesToSeed[0], cancellationToken: ct);
+
+                                if (!contains)
+                                {
+                                    await context.Set<Routines.Api.Domain.Schedule>().AddRangeAsync(schedulesToSeed, cancellationToken: ct);
+                                    await context.SaveChangesAsync();
+                                }
+                            })
+                    );
+                    
+                    _dbContext = services.BuildServiceProvider().GetService<RoutinesDbContext>()!;
                 });
             });
         

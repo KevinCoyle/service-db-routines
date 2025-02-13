@@ -23,7 +23,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<RoutinesDbContext>(x => x.UseNpgsql("Database:ConnectionString"));
+builder.Services.AddDbContext<RoutinesDbContext>(optionsBUilder => optionsBUilder.UseNpgsql(builder.Configuration["Database:ConnectionString"]!));
 builder.Services.AddScoped<IActionService, ActionService>();
 builder.Services.AddScoped<IRoutineService, RoutineService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();

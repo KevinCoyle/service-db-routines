@@ -10,6 +10,4 @@ public class User
     public string FullName { get; set; } = default!;
 
     public string Email { get; set; } = default!;
-
-    public DateOnly DateOfBirth { get; set; } = default!;
 }

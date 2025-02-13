@@ -63,7 +63,6 @@ public class UserController : ControllerBase
 
         user.FullName = request.User.FullName ?? user.FullName;
         user.Email = request.User.Email ?? user.Email;
-        user.DateOfBirth = request.User.DateOfBirth ?? user.DateOfBirth;
         await _userService.UpdateAsync(user);
 
         var userResponse = user.ToUserResponse();

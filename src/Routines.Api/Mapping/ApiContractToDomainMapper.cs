@@ -51,9 +51,9 @@ public static class ApiContractToDomainMapper
     {
         return new Schedule
         {
-            Id = Guid.NewGuid(),
-            Name = request.Name,
-            Description = request.Description,
+            Id = Guid.NewGuid()
+            , Name = request.Name
+            , Description = request.Description,
         };
     }
     
@@ -61,9 +61,9 @@ public static class ApiContractToDomainMapper
     {
         return new Schedule
         {
-            Id = request.Id,
-            Name = request.Schedule.Name,
-            Description = request.Schedule.Description,
+            Id = request.Id
+            , Name = request.Schedule.Name
+            , Description = request.Schedule.Description,
         };
     }
     
@@ -71,10 +71,9 @@ public static class ApiContractToDomainMapper
     {
         return new User
         {
-            Id = Guid.NewGuid(),
-            Email = request.Email,
-            FullName = request.FullName,
-            DateOfBirth = request.DateOfBirth
+            Id = Guid.NewGuid()
+            , Email = request.Email
+            , FullName = request.FullName
         };
     }
 
@@ -82,10 +81,9 @@ public static class ApiContractToDomainMapper
     {
         return new User
         {
-            Id = request.Id,
-            Email = request.User.Email,
-            FullName = request.User.FullName,
-            DateOfBirth = request.User.DateOfBirth
+            Id = request.Id
+            , Email = request.User.Email
+            , FullName = request.User.FullName
         };
     }
 }

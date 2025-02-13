@@ -104,8 +104,7 @@ public static class DomainToApiContractMapper
         {
             Id = user.Id,
             Email = user.Email,
-            FullName = user.FullName,
-            DateOfBirth = user.DateOfBirth
+            FullName = user.FullName
         };
     }
 
@@ -117,8 +116,7 @@ public static class DomainToApiContractMapper
             {
                 Id = user.Id,
                 Email = user.Email,
-                FullName = user.FullName,
-                DateOfBirth = user.DateOfBirth
+                FullName = user.FullName
             })
         };
     }
