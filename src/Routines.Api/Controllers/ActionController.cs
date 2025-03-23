@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Routines.Api.Attributes;
 using Routines.Api.Mapping;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ public class ActionController : ControllerBase
         _actionService = actionService;
     }
 
+    [Description("Create a new Action.")]
     [HttpPost("actions")]
     public async Task<IActionResult> Create([FromBody] ActionRequest request)
     {
@@ -28,6 +30,7 @@ public class ActionController : ControllerBase
         return CreatedAtAction("Get", new { actionResponse.Id }, actionResponse);
     }
 
+    [Description("Get an Action by ID.")]
     [HttpGet("actions/{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
@@ -42,6 +45,7 @@ public class ActionController : ControllerBase
         return Ok(actionResponse);
     }
     
+    [Description("Get All Actions.")]
     [HttpGet("actions")]
     public async Task<IActionResult> GetAll()
     {
@@ -50,6 +54,7 @@ public class ActionController : ControllerBase
         return Ok(actionsResponse);
     }
     
+    [Description("Update an Action by ID.")]
     [HttpPut("actions/{id:guid}")]
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateActionRequest request)
@@ -68,6 +73,7 @@ public class ActionController : ControllerBase
         return Ok(actionResponse);
     }
     
+    [Description("Delete an Action by ID.")]
     [HttpDelete("actions/{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {

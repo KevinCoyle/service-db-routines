@@ -21,7 +21,7 @@ builder.Services.AddFluentValidationAutoValidation(c => { c.DisableDataAnnotatio
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<RoutinesDbContext>(optionsBUilder => optionsBUilder.UseNpgsql(builder.Configuration["Database:ConnectionString"]!));
 builder.Services.AddScoped<IActionService, ActionService>();
@@ -31,10 +31,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
+app.MapStaticAssets();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();

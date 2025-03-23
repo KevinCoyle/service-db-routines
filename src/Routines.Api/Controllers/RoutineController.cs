@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Routines.Api.Attributes;
 using Routines.Api.Mapping;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ public class RoutineController : ControllerBase
         _routineService = routineService;
     }
 
+    [Description("Create a new Routine.")]
     [HttpPost("routines")]
     public async Task<IActionResult> Create([FromBody] RoutineRequest request)
     {
@@ -28,6 +30,7 @@ public class RoutineController : ControllerBase
         return CreatedAtAction("Get", new { routineResponse.Id }, routineResponse);
     }
 
+    [Description("Get a Routine by ID.")]
     [HttpGet("routines/{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
@@ -42,6 +45,7 @@ public class RoutineController : ControllerBase
         return Ok(routineResponse);
     }
     
+    [Description("Get all Routines.")]
     [HttpGet("routines")]
     public async Task<IActionResult> GetAll()
     {
@@ -50,6 +54,7 @@ public class RoutineController : ControllerBase
         return Ok(routinesResponse);
     }
     
+    [Description("Update a Routine by ID.")]
     [HttpPut("routines/{id:guid}")]
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateRoutineRequest request)
@@ -69,6 +74,7 @@ public class RoutineController : ControllerBase
         return Ok(routineResponse);
     }
     
+    [Description("Delete a Routine by ID.")]
     [HttpDelete("routines/{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
 using Routines.Api.Attributes;
 using Routines.Api.Contracts.Requests.Schedules;
@@ -16,6 +17,7 @@ public class ScheduleController : ControllerBase
         _scheduleService = scheduleService;
     }
 
+    [Description("Create a new Schedule.")]
     [HttpPost("schedules")]
     public async Task<IActionResult> Create([FromBody] ScheduleRequest request)
     {
@@ -28,6 +30,7 @@ public class ScheduleController : ControllerBase
         return CreatedAtAction("Get", new { scheduleResponse.Id }, scheduleResponse);
     }
 
+    [Description("Get a Schedule by ID.")]
     [HttpGet("schedules/{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
@@ -42,6 +45,7 @@ public class ScheduleController : ControllerBase
         return Ok(scheduleResponse);
     }
     
+    [Description("Get all Schedules.")]
     [HttpGet("schedules")]
     public async Task<IActionResult> GetAll()
     {
@@ -50,6 +54,7 @@ public class ScheduleController : ControllerBase
         return Ok(schedulesResponse);
     }
     
+    [Description("Update a Schedule by ID.")]
     [HttpPut("schedules/{id:guid}")]
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateScheduleRequest request)
@@ -69,6 +74,7 @@ public class ScheduleController : ControllerBase
         return Ok(scheduleResponse);
     }
     
+    [Description("Delete a Schedule by ID.")]
     [HttpDelete("schedules/{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
