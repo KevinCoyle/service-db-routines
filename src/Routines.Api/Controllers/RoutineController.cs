@@ -8,6 +8,7 @@ using Routines.Api.Services.Interfaces;
 namespace Routines.Api.Controllers;
 
 [ApiController]
+[Route("api/v{version:apiVersion}/[Controller]s")]
 public class RoutineController : ControllerBase
 {
     private readonly IRoutineService _routineService;
@@ -17,8 +18,8 @@ public class RoutineController : ControllerBase
         _routineService = routineService;
     }
 
+    [HttpPost]
     [Description("Create a new Routine.")]
-    [HttpPost("routines")]
     public async Task<IActionResult> Create([FromBody] RoutineRequest request)
     {
         var routine = request.ToRoutine();
@@ -30,8 +31,8 @@ public class RoutineController : ControllerBase
         return CreatedAtAction("Get", new { routineResponse.Id }, routineResponse);
     }
 
+    [HttpGet("{id:guid}")]
     [Description("Get a Routine by ID.")]
-    [HttpGet("routines/{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var routine = await _routineService.GetAsync(id);
@@ -45,8 +46,8 @@ public class RoutineController : ControllerBase
         return Ok(routineResponse);
     }
     
+    [HttpGet]
     [Description("Get all Routines.")]
-    [HttpGet("routines")]
     public async Task<IActionResult> GetAll()
     {
         var routines = await _routineService.GetAllAsync();
@@ -54,8 +55,8 @@ public class RoutineController : ControllerBase
         return Ok(routinesResponse);
     }
     
+    [HttpPut("{id:guid}")]
     [Description("Update a Routine by ID.")]
-    [HttpPut("routines/{id:guid}")]
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateRoutineRequest request)
     {
@@ -74,8 +75,8 @@ public class RoutineController : ControllerBase
         return Ok(routineResponse);
     }
     
+    [HttpDelete("{id:guid}")]
     [Description("Delete a Routine by ID.")]
-    [HttpDelete("routines/{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var deleted = await _routineService.DeleteAsync(id);

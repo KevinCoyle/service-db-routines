@@ -8,6 +8,7 @@ using Routines.Api.Services.Interfaces;
 namespace Routines.Api.Controllers;
 
 [ApiController]
+[Route("api/v{version:apiVersion}/[Controller]s")]
 public class ScheduleController : ControllerBase
 {
     private readonly IScheduleService _scheduleService;
@@ -17,8 +18,8 @@ public class ScheduleController : ControllerBase
         _scheduleService = scheduleService;
     }
 
+    [HttpPost]
     [Description("Create a new Schedule.")]
-    [HttpPost("schedules")]
     public async Task<IActionResult> Create([FromBody] ScheduleRequest request)
     {
         var schedule = request.ToSchedule();
@@ -30,8 +31,8 @@ public class ScheduleController : ControllerBase
         return CreatedAtAction("Get", new { scheduleResponse.Id }, scheduleResponse);
     }
 
+    [HttpGet("{id:guid}")]
     [Description("Get a Schedule by ID.")]
-    [HttpGet("schedules/{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var schedule = await _scheduleService.GetAsync(id);
@@ -45,8 +46,8 @@ public class ScheduleController : ControllerBase
         return Ok(scheduleResponse);
     }
     
+    [HttpGet]
     [Description("Get all Schedules.")]
-    [HttpGet("schedules")]
     public async Task<IActionResult> GetAll()
     {
         var schedules = await _scheduleService.GetAllAsync();
@@ -54,8 +55,8 @@ public class ScheduleController : ControllerBase
         return Ok(schedulesResponse);
     }
     
+    [HttpPut("{id:guid}")]
     [Description("Update a Schedule by ID.")]
-    [HttpPut("schedules/{id:guid}")]
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateScheduleRequest request)
     {
@@ -74,8 +75,8 @@ public class ScheduleController : ControllerBase
         return Ok(scheduleResponse);
     }
     
+    [HttpDelete("{id:guid}")]
     [Description("Delete a Schedule by ID.")]
-    [HttpDelete("schedules/{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var deleted = await _scheduleService.DeleteAsync(id);

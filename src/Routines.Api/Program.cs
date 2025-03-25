@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Routines.Api.Database;
 using Routines.Api.Validation;
 using FluentValidation;
@@ -5,6 +6,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Routines.Api.Services.Implementations;
 using Routines.Api.Services.Interfaces;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -16,6 +18,15 @@ var config = builder.Configuration;
 config.AddEnvironmentVariables("UsersApi_");
 
 builder.Services.AddControllers();
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+}).AddApiExplorer(options => {
+    options.GroupNameFormat = "'v'VVV"; 
+    options.SubstituteApiVersionInUrl = true; 
+});
 
 builder.Services.AddFluentValidationAutoValidation(c => { c.DisableDataAnnotationsValidation = true; });
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -36,6 +47,7 @@ app.MapStaticAssets();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

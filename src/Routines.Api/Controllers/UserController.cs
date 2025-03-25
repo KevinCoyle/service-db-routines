@@ -8,6 +8,7 @@ using Routines.Api.Services.Interfaces;
 namespace Routines.Api.Controllers;
 
 [ApiController]
+[Route("api/v{version:apiVersion}/[Controller]s")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -17,8 +18,8 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
+    [HttpPost]
     [Description("Create a new User.")]
-    [HttpPost("users")]
     public async Task<IActionResult> Create([FromBody] UserRequest request)
     {
         var user = request.ToUser();
@@ -30,8 +31,8 @@ public class UserController : ControllerBase
         return CreatedAtAction("Get", new { userResponse.Id }, userResponse);
     }
 
+    [HttpGet("{id:guid}")]
     [Description("Get a User by ID.")]
-    [HttpGet("users/{id:guid}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var user = await _userService.GetAsync(id);
@@ -45,8 +46,8 @@ public class UserController : ControllerBase
         return Ok(userResponse);
     }
     
+    [HttpGet]
     [Description("Get all Users.")]
-    [HttpGet("users")]
     public async Task<IActionResult> GetAll()
     {
         var users = await _userService.GetAllAsync();
@@ -54,8 +55,8 @@ public class UserController : ControllerBase
         return Ok(usersResponse);
     }
     
+    [HttpPut("{id:guid}")]
     [Description("Update a new User by ID.")]
-    [HttpPut("users/{id:guid}")]
     public async Task<IActionResult> Update(
         [FromMultiSource] UpdateUserRequest request)
     {
@@ -74,8 +75,8 @@ public class UserController : ControllerBase
         return Ok(userResponse);
     }
     
+    [HttpDelete("{id:guid}")]
     [Description("Delete a User by ID.")]
-    [HttpDelete("users/{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var deleted = await _userService.DeleteAsync(id);
